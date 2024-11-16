@@ -8,7 +8,7 @@ import {
   FieldError,
 } from "react-aria-components";
 import { classes } from "../classes";
-const UserForm = ({ setUsers }) => {
+const UserForm = ({ setUsers = () => {} }) => {
   let [submitted, setSubmitted] = useState(null);
 
   let onSubmit = (e) => {
