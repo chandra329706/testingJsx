@@ -8,7 +8,8 @@ import {
   FieldError,
 } from "react-aria-components";
 import { classes } from "../classes";
-const UserForm = ({addUsers}) => {
+
+const UserForm = ({addUser}) => {
   let [submitted, setSubmitted] = useState(null);
 
   let onSubmit = (e) => {
@@ -18,7 +19,7 @@ const UserForm = ({addUsers}) => {
     // Get form data as an object.
     let data = Object.fromEntries(new FormData(e.currentTarget));
     console.log("data is ", data);
-    addUsers(data);
+    addUser(data);
 
     // Submit to your backend API...
     setSubmitted(data);
@@ -53,12 +54,6 @@ const UserForm = ({addUsers}) => {
           Submit
         </Button>
       </div>
-
-      {submitted && (
-        <div className="col-span-full space-y-12">
-          You submitted: <code>{JSON.stringify(submitted)}</code>
-        </div>
-      )}
     </Form>
   );
 };

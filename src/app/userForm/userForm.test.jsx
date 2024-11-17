@@ -1,63 +1,40 @@
-/*
-1) It should contain two text boxes and one button
-2) On direct click of submit, errors should be thrown
-3) On entering either one, the submit should throw error.
-4) On entering both fields and clicking on submit, the form should be submitted.
-*/
-
-import {screen, render, waitFor, fireEvent} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import UserForm from './userForm';
+import { screen, render } from "@testing-library/react";
+import user from "@testing-library/user-event";
+import UserForm from "./userForm";
 import '@testing-library/jest-dom';
-
-test('Should contain two text boxes and one button', async () => {
-    // render the component
+/*
+    1) Test if two inputs and submit button are present.
+    2) Test if filling of email and name fields adn clicking on the submti btuton is callign the addUser function and the same data is added.
+*/
+test('should contain name and email text boxes and submit button', () => {
+    // render the compnent
     render(<UserForm />);
-    // modify the dom / find element
-    const nameInput = screen.getAllByText(/name/i);
-    const emailInput = screen.getAllByText(/email/i);
-    const button = screen.getAllByRole('button', {name: /submit/i});
-    const button1 = screen.getByRole('button', {name: /submit/i});
+    // modifiy the dom
+    const nameInput = screen.getByRole('textbox', {name: /name/i});
+    const emailInput = screen.getByRole('textbox', {name: /email/i});
+    const submitButton = screen.getByRole('button', {name: /submit/i});
     // assertions
-    expect(nameInput).toHaveLength(1);
-    expect(emailInput).toHaveLength(1);
-    expect(button).toHaveLength(1);
-    expect(button1).toBeInTheDocument();
+    expect(nameInput).toBeInTheDocument();
+    expect(emailInput).toBeInTheDocument();
+    expect(submitButton).toBeInTheDocument();
 });
 
-// test('Validation error should be thrown if input fields are not filled but button clicked', async () => {
-//     // render the component
-//     render(<UserForm />);
-//     // modify the dom / find element
-//     const sumbitButton = screen.getByRole('button', {name: /submit/i});
-
-//     await userEvent.click(sumbitButton);
-//     // why is this test case not failing even after npa
-//     waitFor(() => {
-//         const errors = screen.getAllByText(/Please fill out this field./i);
-//         expect(errors).toHaveLength(13);
-//     });
-// });
-
-test('On filling of name and email fields, the button should call the setUsers function', async() => {
-    const argsList = [];
-    const callBack = ({name, email}) => {
-        argsList.push({name, email});
-    };
-    // Render the component
-    render(<UserForm addUsers={callBack}/>);
-
-    // Modify the dom / find element
+test('Filling the input fields and clicking on submit button calls the addUser function correctly', async () => {
+    const users = [];
+    let callBack = (details) => {
+        users.push(details);
+    }
+    // render the compnent
+    render(<UserForm addUser={callBack}/>);
+    // modifiy the dom
     const nameInput = screen.getByRole('textbox', {name: /name/i});
-    await userEvent.click(nameInput);
-    await userEvent.keyboard('Chandra');
-
     const emailInput = screen.getByRole('textbox', {name: /email/i});
-    await userEvent.click(emailInput);
-    await userEvent.keyboard('chandra@mgail.com');
-
     const submitButton = screen.getByRole('button', {name: /submit/i});
-    await userEvent.click(submitButton);
-    expect(argsList).toHaveLength(1);
-    expect(argsList[0]).toEqual({name: 'Chandra', email: 'chandra@mgail.com'});
+    // assertions
+    await user.click(nameInput);
+    await user.keyboard('Jane');
+    await user.click(emailInput);
+    await user.keyboard('jane@mgail.com');
+    await user.click(submitButton);
+    expect(users[0]).toEqual({name: 'Jane', email: 'jane@mgail.com'});
 });
