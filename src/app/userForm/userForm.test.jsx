@@ -20,12 +20,14 @@ test('should contain name and email text boxes and submit button', () => {
 });
 
 test('Filling the input fields and clicking on submit button calls the addUser function correctly', async () => {
-    const users = [];
-    let callBack = (details) => {
-        users.push(details);
-    }
+    // const users = [];
+    // let callBack = (details) => {
+    //     users.push(details);
+    // }
+    const mock = jest.fn();
     // render the compnent
-    render(<UserForm addUser={callBack}/>);
+    // render(<UserForm addUser={callBack}/>);
+    render(<UserForm addUser={mock}/>);
     // modifiy the dom
     const nameInput = screen.getByRole('textbox', {name: /name/i});
     const emailInput = screen.getByRole('textbox', {name: /email/i});
@@ -36,5 +38,7 @@ test('Filling the input fields and clicking on submit button calls the addUser f
     await user.click(emailInput);
     await user.keyboard('jane@mgail.com');
     await user.click(submitButton);
-    expect(users[0]).toEqual({name: 'Jane', email: 'jane@mgail.com'});
+    // expect(users[0]).toEqual({name: 'Jane', email: 'jane@mgail.com'});
+    expect(mock).toHaveBeenCalled();
+    expect(mock).toHaveBeenCalledWith({name: 'Jane', email: 'jane@mgail.com'});
 });
