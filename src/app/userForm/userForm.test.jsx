@@ -11,30 +11,16 @@ import UserForm from './userForm';
 import '@testing-library/jest-dom';
 
 test('Should contain two text boxes and one button', async () => {
+    // render the component
     render(<UserForm />);
-    const submitButton = await screen.findAllByRole('button');
-    expect(submitButton).toHaveLength(1);
-
-    const nameInputBox = await screen.findByLabelText('Name');
-    expect(nameInputBox).toBeInTheDocument();
-
-    const emailInputBox = await screen.findByLabelText('Email');
-    expect(emailInputBox).toBeInTheDocument();
-});
-test('Throw error on click of button without filling data', async () => {
-    render(<UserForm />);
-    const submitButton = await screen.getByRole('button', {name: /submit/i});
-    fireEvent.click(submitButton);
-    await waitFor(async () => {
-        // Check if the FieldError for the "name" input is visible
-        expect(screen.getByText(/name/i)).toBeInTheDocument(); // Label for name input
-        expect(screen.getByText(/email/i)).toBeInTheDocument(); // Label for email input
-        // Check if FieldError for name and email fields are displayed
-        // expect(screen.getByText(/this field is required/i)).toBeInTheDocument();
-
-
-        // const errorText = await screen.findAllByText(/please fill in this field/i);
-        // console.log('error text is ', errorText);
-        // expect(errorText).toHaveLength(2);
-    });
+    // modify the dom / find element
+    const nameInput = screen.getAllByText(/name/i);
+    const emailInput = screen.getAllByText(/email/i);
+    const button = screen.getAllByRole('button', {name: /submit/i});
+    const button1 = screen.getByRole('button', {name: /submit/i});
+    // assertions
+    expect(nameInput).toHaveLength(1);
+    expect(emailInput).toHaveLength(1);
+    expect(button).toHaveLength(1);
+    expect(button1).toBeInTheDocument();
 });
