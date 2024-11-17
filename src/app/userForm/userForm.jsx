@@ -8,7 +8,7 @@ import {
   FieldError,
 } from "react-aria-components";
 import { classes } from "../classes";
-const UserForm = ({ setUsers = () => {} }) => {
+const UserForm = ({addUsers}) => {
   let [submitted, setSubmitted] = useState(null);
 
   let onSubmit = (e) => {
@@ -18,7 +18,7 @@ const UserForm = ({ setUsers = () => {} }) => {
     // Get form data as an object.
     let data = Object.fromEntries(new FormData(e.currentTarget));
     console.log("data is ", data);
-    setUsers((prevUsers) => [...prevUsers, data]);
+    addUsers(data);
 
     // Submit to your backend API...
     setSubmitted(data);

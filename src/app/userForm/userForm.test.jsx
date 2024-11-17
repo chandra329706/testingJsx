@@ -24,3 +24,40 @@ test('Should contain two text boxes and one button', async () => {
     expect(button).toHaveLength(1);
     expect(button1).toBeInTheDocument();
 });
+
+// test('Validation error should be thrown if input fields are not filled but button clicked', async () => {
+//     // render the component
+//     render(<UserForm />);
+//     // modify the dom / find element
+//     const sumbitButton = screen.getByRole('button', {name: /submit/i});
+
+//     await userEvent.click(sumbitButton);
+//     // why is this test case not failing even after npa
+//     waitFor(() => {
+//         const errors = screen.getAllByText(/Please fill out this field./i);
+//         expect(errors).toHaveLength(13);
+//     });
+// });
+
+test('On filling of name and email fields, the button should call the setUsers function', async() => {
+    const argsList = [];
+    const callBack = ({name, email}) => {
+        argsList.push({name, email});
+    };
+    // Render the component
+    render(<UserForm addUsers={callBack}/>);
+
+    // Modify the dom / find element
+    const nameInput = screen.getByRole('textbox', {name: /name/i});
+    await userEvent.click(nameInput);
+    await userEvent.keyboard('Chandra');
+
+    const emailInput = screen.getByRole('textbox', {name: /email/i});
+    await userEvent.click(emailInput);
+    await userEvent.keyboard('chandra@mgail.com');
+
+    const submitButton = screen.getByRole('button', {name: /submit/i});
+    await userEvent.click(submitButton);
+    expect(argsList).toHaveLength(1);
+    expect(argsList[0]).toEqual({name: 'Chandra', email: 'chandra@mgail.com'});
+});
